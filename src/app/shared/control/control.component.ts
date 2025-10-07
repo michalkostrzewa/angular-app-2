@@ -7,7 +7,11 @@ import { Component, Input, ViewEncapsulation } from "@angular/core";
   templateUrl: "./control.component.html",
   styleUrl: "./control.component.css",
   encapsulation: ViewEncapsulation.None,
+  host: {
+    class: "control",
+  },
 })
 export class ControlComponent {
+  // @HostListener() class = "control";
   @Input({ required: true }) label!: string;
 }
