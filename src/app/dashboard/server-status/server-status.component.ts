@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, effect, OnDestroy, OnInit, signal } from "@angular/core";
 
 enum Status {
   Online = "online",
@@ -14,19 +14,25 @@ enum Status {
   styleUrl: "./server-status.component.css",
 })
 export class ServerStatusComponent implements OnInit, OnDestroy {
-  currentStatus: Status = Status.Online;
+  currentStatus = signal<Status>(Status.Online);
   private interval?: ReturnType<typeof setInterval>;
+
+  constructor() {
+    effect(() => {
+      console.log(this.currentStatus());
+    });
+  }
 
   ngOnInit() {
     this.interval = setInterval(() => {
       const rnd = Math.random();
 
       if (rnd < 0.5) {
-        this.currentStatus = Status.Online;
+        this.currentStatus.set(Status.Online);
       } else if (rnd < 0.8) {
-        this.currentStatus = Status.Offline;
+        this.currentStatus.set(Status.Offline);
       } else {
-        this.currentStatus = Status.Unknow;
+        this.currentStatus.set(Status.Unknow);
       }
     }, 5000);
   }
